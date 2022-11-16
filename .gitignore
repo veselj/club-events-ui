@@ -38,10 +38,11 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
+.vscode/
 
 # System files
 .DS_Store
 Thumbs.db
 
 # Terraform
-/deployments/terrafor/.terraform/
+/deployments/terraform/.terraform/

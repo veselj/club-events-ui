@@ -1,0 +1,199 @@
+<div class="row justify-content-center my-5">
+  <div class="col-6">
+    <div class="card">
+      <!-- select signup/confirm -->
+      <div class="container form-group">
+        <div class="row justify-content-end">
+          <div style="width: fit-content">
+            <form #selectForm="ngForm">
+              <div class="form-check form-switch">
+                <input class="form-check-input"
+                       type="checkbox"
+                       id="confirmUserSwitch"
+                       (change)="onSelectChange($event)">
+
+                <label class="form-check-label "
+                       for="confirmUserSwitch"
+                >Confirm User Stage</label>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+      <!--   Sign up a new user-->
+      <div class="card-body" *ngIf="!confirmUser">
+        <form #userForm="ngForm" (ngSubmit)="onSignup()">
+          <div class="row">
+            <div class="form-group col mb-2">
+              <label for="name" class="form-label">Name</label>
+              <input type="text"
+                     id="name"
+                     name="name"
+                     class="form-control form-control-sm"
+                     aria-describedby="nameHelp"
+                     placeholder="Your first name"
+                     ngModel
+                     required
+              >
+            </div>
+            <div class="form-group col mb-2">
+              <label for="surname" class="form-label">Surname</label>
+              <input type="text"
+                     id="surname"
+                     name="surname"
+                     class="form-control form-control-sm"
+                     aria-describedby="nameHelp"
+                     placeholder="Your first name"
+                     ngModel
+                     required>
+            </div>
+            <small
+              id="nameHelp"
+              class="form-text text-muted">
+              Your name and surname will be visible to club members on this club events site when you join an
+              event.</small>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="form-group col mb-2">
+              <label for="email" class="form-label">Email</label>
+              <input type="email"
+                     id="email"
+                     name="email"
+                     class="form-control form-control-sm"
+                     aria-describedby="emailHelp"
+                     placeholder="Your valid e-mail address"
+                     ngModel
+                     email
+                     required>
+              <small id="emailHelp" class="form-text text-muted">
+                You will use it to confirm your account, to login or reset your password if necessary.
+                Club events will use it to send notifications related to events that you signed up.
+                The e-mail will not be publicly displayed.</small>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col mb-2">
+              <label for="password" class="form-label">Password</label>
+              <div class="input-group input-group-sm">
+                <input [type]="user.showPassword ? 'text' : 'password'"
+                       id="password"
+                       name="password"
+                       ngModel
+                       password
+                       required
+                       placeholder="Choose a good unique password"
+                       aria-describedby="passwordHelp"
+                       class="form-control form-control-sm">
+                <button type="button" class="btn btn-outline-secondary"
+                        (click)="user.showPassword = !user.showPassword">
+
+                  <i class="fa" [ngClass]="{'fa-eye': !user.showPassword, 'fa-eye-slash': user.showPassword}"></i>
+                </button>
+              </div>
+              <small id="passwordHelp" class="form-text text-muted">
+                Your password should be unique. It must be at least 8 characters long containing at least 1 number,
+                1 lower-case character, 1 upper-case character and 1 special character.</small>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="form-group col mb-2">
+              <label for="friend" class="form-label">Link another club member (child, partner or a friend)</label>
+              <div class="input-group input-group-sm">
+                <input type="text"
+                       id="friend"
+                       name="friend"
+                       class="form-control form-control-sm"
+                       aria-describedby="friendHelp"
+                       placeholder="Enter the name of your child, partner or friend"
+                       #friend
+                       required
+                       (keyup)="onFriendChanged(friend.value)">
+                <button [disabled]="disableAddFriend" type="button" class="btn btn-primary" role="button"
+                        (click)="addFriend(friend.value); friend.value=''">Link a member
+                </button>
+              </div>
+              <small id="friendHelp" class="form-text text-muted">
+                You will be able to sign this person (also a club member) to club events using your account. </small>
+            </div>
+          </div>
+          <div *ngFor="let friend of friends">
+            <div class="row">
+              <div class="text-start text-primary border">
+                {{friend}}
+                <button type="button" class="btn btn-outline-secondary text-end"
+                        (click)="removeFriend(friend)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col d-grid">
+              <button type="submit" class="btn btn-sm btn-success"
+                      [disabled]="isLoading || !userForm.valid">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                      *ngIf="isLoading"></span>
+                Sign up
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Confirm User -->
+      <div class="card-body" *ngIf="confirmUser">
+        <form #confirmForm="ngForm" (ngSubmit)="onConfirm(confirmForm.value)">
+
+          <div class="row">
+            <div class="form-group col mb-2">
+              <label for="emailConfirm" class="form-label">Email</label>
+              <input type="email"
+                     id="emailConfirm"
+                     name="email"
+                     class="form-control form-control-sm"
+                     aria-describedby="emailHelpConfirm"
+                     placeholder="Your valid e-mail address"
+                     [value]="user.email"
+                     email
+                     required>
+              <small id="emailHelpConfirm" class="form-text text-muted">
+                The email used to when signing-up for an account.</small>
+            </div>
+          </div>
+
+          <div class="form-group col mb-2">
+            <label for="code" class="form-label">Confirmation Code</label>
+            <input type="text"
+                   id="code"
+                   name="code"
+                   class="form-control form-control-sm"
+                   aria-describedby="codeHelp"
+                   placeholder="Enter the code you received by email"
+                   ngModel
+                   required>
+          </div>
+          <small
+            id="codeHelp"
+            class="form-text text-muted">
+            Your account must be confirmed by providing the confirmation code.</small>
+
+          <div class="row">
+
+            <div class="col d-grid">
+              <button type="submit" class="btn btn-sm btn-success"
+                      [disabled]="isLoading || !confirmForm.valid">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                      *ngIf="isLoading"></span>
+                Confirm
+              </button>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
