@@ -12,6 +12,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('dashboard');
+    this.cognitoService.getUser();
+
   }
 
   end() {

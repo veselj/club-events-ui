@@ -14,10 +14,13 @@ export class LoginComponent implements OnInit {
   user = { showPassword: false, email: '', password: ''}
   isLoading = false;
   errorMessage = "";
+  didFail = false;
 
   constructor(private router: Router, private cognitoService: CognitoService) { }
 
   ngOnInit(): void {
+    this.cognitoService.inProgress.subscribe(inProgress => this.isLoading = inProgress);
+    this.cognitoService.authDidFail.subscribe(didFail => this.didFail = didFail);
   }
 
   onLogin(): void {
