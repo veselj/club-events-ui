@@ -1,7 +1,66 @@
-<p>login works!</p>
-<p>
-<a href="#" class="btn btn-primary" (click)="start()">Login</a>
-</p>
-<p>
-<a href="#" class="btn btn-primary" (click)="end()">Logout</a>
-</p>
+
+<div class="row justify-content-center my-5">
+  <div class="col-4">
+    <div class="card">
+
+<div class="card-header text-center">Enter into Club Events</div>
+      <div class="card-body">
+        <form #loginForm="ngForm" (ngSubmit)="onLogin()">
+          <div class="row">
+            <div class="form-group col mb-2">
+              <label for="email" class="form-label">Email</label>
+              <input type="email"
+                     id="email"
+                     name="email"
+                     class="form-control form-control-sm"
+                     placeholder="Your login e-mail address"
+                     ngModel
+                     email
+                     required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col mb-2">
+              <label for="password" class="form-label">Password</label>
+              <div class="input-group input-group-sm">
+                <input [type]="user.showPassword ? 'text' : 'password'"
+                       id="password"
+                       name="password"
+                       ngModel
+                       password
+                       required
+                       placeholder="Enter your password"
+                       class="form-control form-control-sm">
+                <button type="button" class="btn btn-outline-secondary"
+                        (click)="user.showPassword = !user.showPassword">
+
+                  <i class="fa" [ngClass]="{'fa-eye': !user.showPassword, 'fa-eye-slash': user.showPassword}"></i>
+                </button>
+              </div>
+              <p class="text-end"><a href="/reset" class="small">Forgotten password?</a></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col d-grid">
+              <button type="submit" class="btn btn-sm btn-success"
+                      [disabled]="isLoading || !loginForm.valid">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                      *ngIf="isLoading"></span>
+                Log in
+              </button>
+            </div>
+          </div>
+          <p class="text-end"><a href="/signup" class="small">Not yet registered?</a></p>
+          <div class="row" *ngIf="errorMessage">
+          <hr>
+            <div class="col error-message">
+              {{errorMessage}}
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

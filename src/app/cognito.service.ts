@@ -17,6 +17,11 @@ export interface IConfirmUser {
   code: string;
 }
 
+export interface ILoginUser {
+  email: string;
+  password: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -87,7 +92,7 @@ export class CognitoService {
     this.inProgress.next(true);
     return Auth.confirmSignUp(user.email, user.code).then((user) => {
       this.inProgress.next(false);
-      this.authDidFail.next(true);
+      this.authDidFail.next(false);
       return user;
     }).catch((e) => {
       console.error("Error confirming sign up " + e);
@@ -97,12 +102,18 @@ export class CognitoService {
     });
   }
 
-  // public signIn(user: IUser): Promise<any> {
-  //   return Auth.signIn(user.email, user.password)
-  //     .then(() => {
-  //       this.authenticationSubject.next(true);
-  //     });
-  // }
+  public signIn(user: ILoginUser): Promise<any> {
+    return Auth.signIn(user.email, user.password)
+      .then(() => {
+        this.inProgress.next(false);
+        this.authDidFail.next(false);
+        this.authStatusChanged.next(true);
+      }).catch((e) => {
+        this.inProgress.next(false);
+        this.authDidFail.next(true);
+        return Promise.reject(e.message);
+      });
+  }
 
   public signOut(): Promise<any> {
     return Auth.signOut({global: true})
@@ -127,14 +138,14 @@ export class CognitoService {
         });
     }
   }
-
-   login() {
-    this.init();
-    setTimeout(async () => {
-      const credentials = await Auth.federatedSignIn();
-      console.log(`credentials ${credentials}`);
-    }, 3000);
-  }
+  //
+  //  login() {
+  //   this.init();
+  //   setTimeout(async () => {
+  //     const credentials = await Auth.federatedSignIn();
+  //     console.log(`credentials ${credentials}`);
+  //   }, 3000);
+  // }
 
   public getUser(): Promise<any> {
     return Auth.currentUserInfo();

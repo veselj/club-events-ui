@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import {CognitoService} from '../cognito.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {CognitoService, ILoginUser, IUser} from '../cognito.service';
+import {Router} from "@angular/router";
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app-login',
@@ -8,15 +10,26 @@ import {CognitoService} from '../cognito.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private cognitoService: CognitoService) { }
+  @ViewChild('loginForm') form: NgForm|undefined;
+  user = { showPassword: false, email: '', password: ''}
+  isLoading = false;
+  errorMessage = "";
+
+  constructor(private router: Router, private cognitoService: CognitoService) { }
 
   ngOnInit(): void {
   }
 
-  start() {
-    this.cognitoService.login();
-  }
-  end() {
-    this.cognitoService.signOut();
+  onLogin(): void {
+    this.errorMessage = '';
+    const user: ILoginUser = {
+      email: this.form?.value.email,
+      password: this.form?.value.password,
+    }
+  this.cognitoService.signIn(user).then(() => {
+     this.router.navigate(['/dashboard']);
+  }).catch((e) => {
+    this.errorMessage = e;
+  })
   }
 }

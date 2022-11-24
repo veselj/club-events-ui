@@ -1,6 +1,9 @@
 <div class="row justify-content-center my-5">
   <div class="col-6">
     <div class="card">
+      <div class="card-header text-center">
+        Register with Club Events
+      </div>
       <!-- select signup/confirm -->
       <div class="container form-group">
         <div class="row justify-content-end">
@@ -14,7 +17,8 @@
 
                 <label class="form-check-label "
                        for="confirmUserSwitch"
-                >Confirm User Stage</label>
+                > {{ confirmUser ? 'Confirm': 'Signup'}} User</label>
+
               </div>
             </form>
           </div>
@@ -23,6 +27,7 @@
       </div>
       <!--   Sign up a new user-->
       <div class="card-body" *ngIf="!confirmUser">
+        <div class="card-title text-center">Sign up</div>
         <form #userForm="ngForm" (ngSubmit)="onSignup()">
           <div class="row">
             <div class="form-group col mb-2">
@@ -139,9 +144,10 @@
                 Sign up
               </button>
             </div>
+            <a href="/login" class="small text-end">Login?</a>
           </div>
-          <hr>
           <div class="row" *ngIf="errorMessage">
+          <hr>
             <div class="col error-message">
               {{errorMessage}}
             </div>
@@ -151,6 +157,7 @@
 
       <!-- Confirm User -->
       <div class="card-body" *ngIf="confirmUser">
+        <div class="card-title text-center">Confirm registration</div>
         <form #confirmForm="ngForm" (ngSubmit)="onConfirm(confirmForm.value)">
 
             <div class="form-group col mb-2">
@@ -160,7 +167,7 @@
                      name="email"
                      class="form-control form-control-sm"
                      aria-describedby="emailHelpConfirm"
-                     placeholder="Your valid e-mail address"
+                     placeholder="Your the e-mail address"
                      email
                      [ngModel]="user.email"
                      required>
@@ -194,9 +201,10 @@
                 Confirm
               </button>
             </div>
+            <a href="/login" class="small text-end">Login?</a>
           </div>
-          <hr>
           <div class="row" *ngIf="errorMessage">
+          <hr>
             <div class="col error-message">
               {{errorMessage}}
             </div>

@@ -22,3 +22,6 @@ terraform_plan:
 terraform_apply:
 	cd deployments/terraform && \
 	terraform apply -auto-approve
+
+github:
+	ssh-add ~/.ssh/veselj_github.rsa
