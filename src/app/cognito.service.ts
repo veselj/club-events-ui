@@ -10,6 +10,10 @@ export interface IUser {
   email: string;
   password: string;
   friends: string[];
+}
+
+export interface IConfirmUser {
+  email: string;
   code: string;
 }
 
@@ -67,18 +71,30 @@ export class CognitoService {
         enabled: false
       }
     }
-    return Auth.signUp(signupParams).then(()=>{
+    return Auth.signUp(signupParams).then((user)=>{
       this.inProgress.next(false);
       this.authDidFail.next(false);
+      return user;
     }).catch((e)=>{
       console.error("Error signing up " + e);
       this.authDidFail.next(true);
       this.inProgress.next(false);
-    })
+      return Promise.reject(e.message);
+    });
   }
 
-  public confirmSignUp(user: IUser): Promise<any> {
-    return Auth.confirmSignUp(user.email, user.code);
+  public confirmSignUp(user: IConfirmUser): Promise<any> {
+    this.inProgress.next(true);
+    return Auth.confirmSignUp(user.email, user.code).then((user) => {
+      this.inProgress.next(false);
+      this.authDidFail.next(true);
+      return user;
+    }).catch((e) => {
+      console.error("Error confirming sign up " + e);
+      this.inProgress.next(false);
+      this.authDidFail.next(true);
+      return Promise.reject(e.message);
+    });
   }
 
   // public signIn(user: IUser): Promise<any> {

@@ -140,6 +140,12 @@
               </button>
             </div>
           </div>
+          <hr>
+          <div class="row" *ngIf="errorMessage">
+            <div class="col error-message">
+              {{errorMessage}}
+            </div>
+          </div>
         </form>
       </div>
 
@@ -147,7 +153,6 @@
       <div class="card-body" *ngIf="confirmUser">
         <form #confirmForm="ngForm" (ngSubmit)="onConfirm(confirmForm.value)">
 
-          <div class="row">
             <div class="form-group col mb-2">
               <label for="emailConfirm" class="form-label">Email</label>
               <input type="email"
@@ -156,13 +161,12 @@
                      class="form-control form-control-sm"
                      aria-describedby="emailHelpConfirm"
                      placeholder="Your valid e-mail address"
-                     [value]="user.email"
                      email
+                     [ngModel]="user.email"
                      required>
               <small id="emailHelpConfirm" class="form-text text-muted">
                 The email used to when signing-up for an account.</small>
             </div>
-          </div>
 
           <div class="form-group col mb-2">
             <label for="code" class="form-label">Confirmation Code</label>
@@ -190,7 +194,12 @@
                 Confirm
               </button>
             </div>
-
+          </div>
+          <hr>
+          <div class="row" *ngIf="errorMessage">
+            <div class="col error-message">
+              {{errorMessage}}
+            </div>
           </div>
         </form>
       </div>

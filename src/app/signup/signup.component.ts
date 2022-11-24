@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import {CognitoService, IUser} from "../cognito.service";
+import {CognitoService, IConfirmUser, IUser} from "../cognito.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-signup',
@@ -15,8 +16,9 @@ export class SignupComponent implements OnInit {
   user = { showPassword: false, email: '', password: '', code: ''}
   friends: string[] = []
   disableAddFriend = true;
+  errorMessage = ''
 
-  constructor(private cognitoService: CognitoService) { }
+  constructor(private router: Router, private cognitoService: CognitoService) { }
   ngOnInit(): void {
     this.cognitoService.inProgress.subscribe(inProgress => this.isLoading = inProgress);
     this.cognitoService.authDidFail.subscribe(didFail => this.didFail = didFail);
@@ -24,6 +26,7 @@ export class SignupComponent implements OnInit {
 
   onSelectChange(event: Event) {
     this.confirmUser =  (<HTMLInputElement>event.target).checked;
+    this.errorMessage = "";
   }
 
   addFriend(friend: string) {
@@ -42,21 +45,38 @@ export class SignupComponent implements OnInit {
   }
 
   onSignup() {
+    this.errorMessage = '';
     const user: IUser = {
       name: this.form?.value.name,
       surname: this.form?.value.surname,
       email: this.form?.value.email,
       password: this.form?.value.password,
       friends: this.friends,
-      code: ''
     }
-    this.cognitoService.signUp(user).then((user) => {
-      console.log("signed up " + JSON.stringify(user));
+    this.cognitoService.signUp(user).then(() => {
+      this.user.email = user.email;
+      this.confirmUser = true;
+    }).catch((e) => {
+      this.confirmUser = false;
+      this.user.email = '';
+      this.errorMessage = e;
     });
   }
 
 
-  onConfirm(formValue: { usrName: string, validationCode: string }) {
-    console.log()
+  onConfirm(formValue: { email: string, code: string}) {
+    this.errorMessage = '';
+    const user: IConfirmUser = {
+      email: formValue.email,
+      code: formValue.code
+    }
+    this.cognitoService.confirmSignUp(user).then(() => {
+      this.confirmUser = false;
+      this.user.email = '';
+      this.router.navigate(['/login']);
+    }).catch((e) => {
+      this.user.email = '';
+      this.errorMessage = e;
+    });
   }
 }
