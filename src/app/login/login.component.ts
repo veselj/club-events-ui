@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {CognitoService, ILoginUser, IUser} from '../cognito.service';
+import {CognitoService, ILoginUser, IUser} from '../services/cognito.service';
 import {Router} from "@angular/router";
 import {NgForm} from "@angular/forms";
 

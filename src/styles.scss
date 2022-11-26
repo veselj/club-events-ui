@@ -1,5 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
 
+// custom colours
+//
+//$primary: rgb(1, 75, 124);
+//$secondary: rgb(85, 93, 7);
+//$success: rgb(22, 108, 93);
+//$info: rgb(153, 201, 215);
+//$warning: rgb(215, 163, 126);
+//$danger: rgb(182, 90, 58);
+//$light: rgb(176, 178, 234);
+//$dark: rgb(5, 3, 4);
+
+$white: #ffffff;
+
+$theme-colors: (
+  "light":      #d8f0ff,
+  "dark":       #371f51,
+  "primary":    #722f30,
+  "secondary":  #572b39,
+  "info":       #f6af97,
+  "accent1":    #a2cbf0,
+  "accent2":    #8c7303,
+  "accent3":    #fc8a10,
+  "success":    #62ac02,
+  "warning":    #ffc274,
+  "danger":     #f60168,
+);
+
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
 
