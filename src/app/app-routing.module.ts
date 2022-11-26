@@ -5,11 +5,11 @@ import {DashboardComponent} from "./dashboard/dashboard.component";
 import {SignupComponent} from "./signup/signup.component";
 
 const routes: Routes = [
-  // {
-  //   path: '',
-  //   redirectTo: 'login',
-  //   pathMatch: 'full'
-  // },
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
   {
     path: 'login',
     component: LoginComponent,
