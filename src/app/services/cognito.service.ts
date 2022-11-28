@@ -150,8 +150,6 @@ export class CognitoService {
   public async getUser(): Promise<any> {
     const userInfo =  await Auth.currentAuthenticatedUser();
     console.log("User info " + JSON.stringify(userInfo));
-    const groups = userInfo.signInUserSession.accessToken.payload["cognito:groups"];
-    console.log("Groups " + JSON.stringify(groups));
     return userInfo;
   }
 

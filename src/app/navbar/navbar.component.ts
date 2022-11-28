@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {CognitoHubService} from "../services/cognito-hub.service";
 
 @Component({
   selector: 'app-navbar',
@@ -7,11 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  userName = 'Jan'
+  userName = ''
 
-  constructor() { }
+  constructor(private hub: CognitoHubService) { }
 
   ngOnInit(): void {
+    this.hub.userNameChan.subscribe((n) => this.userName = n);
   }
 
 }

@@ -73,7 +73,6 @@ export class SignupComponent implements OnInit {
     this.cognitoService.confirmSignUp(user).then(() => {
       this.confirmUser = false;
       this.user.email = '';
-      this.router.navigate(['/login']);
     }).catch((e) => {
       this.user.email = '';
       this.errorMessage = e;
